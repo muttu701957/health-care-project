@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
     - name: spring-boot-k8s
-      image: fincaplus-image:v6
+      image: mruthyunjaymarigoudr/fincaplus-image:v6
       imagePullPolicy: IfNotPresent
       ports:
         - containerPort: 8082
