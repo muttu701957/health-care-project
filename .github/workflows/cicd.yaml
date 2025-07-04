@@ -11,12 +11,21 @@ jobs:
 
     env:
       IMAGE_NAME: fincaplus
-      DOCKER_REPO: ${{ secrets.DOCKER_USERNAME }}/fincaplus
+      DOCKER_REPO: ${{ secrets.DOCKER_USERNAME }}/fincaplus-image
       IMAGE_TAG: v${{ github.run_number }}
 
     steps:
     - name: ⏬ Checkout Code
       uses: actions/checkout@v3
+
+    - name: ☕ Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+
+    - name: 📦 Build JAR with Maven
+      run: mvn clean package --file pom.xml
 
     - name: 🐳 Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
