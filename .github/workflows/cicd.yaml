@@ -27,6 +27,15 @@ jobs:
     - name: 📦 Build JAR with Maven
       run: mvn clean package --file pom.xml
 
+    - name: 🔍 SonarQube Scan
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+        mvn sonar:sonar \
+          -Dsonar.projectKey=Health-care-App \
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+          -Dsonar.login=$SONAR_TOKEN
+
     - name: 🐳 Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
