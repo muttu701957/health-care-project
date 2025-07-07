@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      IMAGE_NAME: fincaplus
+      IMAGE_NAME: fincaplus-image
       DOCKER_REPO: ${{ secrets.DOCKER_USERNAME }}/fincaplus-image
       IMAGE_TAG: v${{ github.run_number }}
 
