@@ -1,4 +1,4 @@
-name: CI for Health-care App
+name: CI for Health-care 
 
 on:
   push:
@@ -32,7 +32,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         mvn sonar:sonar \
-          -Dsonar.projectKey=Health-care-App \
+          -Dsonar.projectKey=Health-care \
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
           -Dsonar.login=$SONAR_TOKEN
 
