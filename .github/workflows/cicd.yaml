@@ -30,11 +30,10 @@ jobs:
     - name: 🔍 SonarQube Scan
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       run: |
         mvn sonar:sonar \
           -Dsonar.projectKey=Health-care-App \
-          -Dsonar.host.url=$SONAR_HOST_URL \
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
           -Dsonar.login=$SONAR_TOKEN
     - name: 🐳 Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
