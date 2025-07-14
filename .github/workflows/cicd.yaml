@@ -1,4 +1,4 @@
-name: CI for Health-care App
+name: CI for Health-care
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      IMAGE_NAME: fincaplus
+      IMAGE_NAME: fincaplus-image
       DOCKER_REPO: ${{ secrets.DOCKER_USERNAME }}/fincaplus-image
       IMAGE_TAG: v${{ github.run_number }}
 
@@ -18,10 +18,10 @@ jobs:
     - name: ⏬ Checkout Code
       uses: actions/checkout@v3
 
-    - name: ☕ Set up JDK 11
+    - name: ☕ Set up JDK 8
       uses: actions/setup-java@v3
       with:
-        java-version: '11'
+        java-version: '8'
         distribution: 'temurin'
 
     - name: 📦 Build JAR with Maven
@@ -31,10 +31,11 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        mvn sonar:sonar \
-          -Dsonar.projectKey=Health-care-App \
+        mvn verify sonar:sonar \
+          -Dsonar.projectKey=Health-care-app \
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
           -Dsonar.login=$SONAR_TOKEN
+
     - name: 🐳 Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
@@ -48,16 +49,16 @@ jobs:
       run: |
         docker build -t $DOCKER_REPO:$IMAGE_TAG .
         docker push $DOCKER_REPO:$IMAGE_TAG
+
     - name: 📝 Update image tag in deployment.yaml
       run: |
         sed -i "s|image: .*|image: $DOCKER_REPO:$IMAGE_TAG|" deployment.yaml
+
     - name: 🔃 Commit and Push Updated deployment.yaml
       run: |
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
+        git pull origin master
         git add deployment.yaml
         git commit -m "🔄 Update image to $DOCKER_REPO:$IMAGE_TAG"
         git push
-        git commit -m "Update image to $DOCKER_REPO:$IMAGE_TAG"
-        git push origin master
-
